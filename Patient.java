@@ -1,6 +1,8 @@
 /** Stores information about a patient awaiting assistance in ER.
  * @author James Murphy
- * @version 1.0 January 29th 2016
+ * @version 1.2 January 31st 2016
+ * ! arrivalTime is now set within the constructor
+ * + compareTo() method
  */
 
 import java.time.LocalDateTime;
@@ -31,9 +33,9 @@ class Patient {
 		firstName = first;
 		lastName = last;
 		triagePriority = priority;
+		arrivalTime = LocalDateTime.now();
 		// to be set upon addition to PatientQueue
 		ID = 0;
-		arrivalTime = null;
 	}
 	
 	/** Obtain the patient's full name in first-last order.
@@ -79,16 +81,6 @@ class Patient {
 		return arrivalTime;
 	}
 	
-	/** Set the patient's arrival time.
-	 * To be done upon adding patient to the PatientQueue.
-	 * @param systemClock a java.time.Clock object
-	 */
-	public void setArrivalTime() {
-		
-		arrivalTime = LocalDateTime.now();
-		arrivalTime.now();
-	}
-	
 	/** Set the patient's ID number.
 	 * To be done upon adding patient to the PatientQueue.
 	 * @param ID a unique six digit int.
@@ -104,5 +96,18 @@ class Patient {
 		return this.getFullName() + " ID:" + Integer.toString(ID, 10) +
 			" P:" + Integer.toString(triagePriority, 10) +
 			" T:" + arrivalTime.toString();
+	}
+	
+	/** Compares objects to allow for a natural ordering.
+	 * @param p A patient object.
+	 */
+	public int compareTo(Patient p) {
+		if (this.triagePriority > p.triagePriority) {
+			return 1;
+		} else if (this.triagePriority < p.triagePriority) {
+			return -1;
+		} else {
+			return this.arrivalTime.compareTo(p.arrivalTime);
+		}
 	}
 }

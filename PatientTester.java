@@ -9,10 +9,13 @@ public class PatientTester {
 		int IDCounter = 1;
 		
 		Patient patient1 = new Patient("David", "Jones", 540);
-		patient1.setArrivalTime();
+		Patient patient2 = new Patient("Grimmjaw", "Horstenworsten", 612);
 		patient1.setPatientID(IDCounter++);
+		patient2.setPatientID(IDCounter++);
+		
 		
 		System.out.println(patient1.toString());
+		System.out.println(patient2.toString());
 		System.out.println(IDCounter);
 		
 		

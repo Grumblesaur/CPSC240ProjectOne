@@ -1,6 +1,9 @@
 runpt: PatientTester.class
 	java PatientTester
 
+PatientQueue.class: PatientQueue.java
+	javac PatientQueue.java
+
 PatientTester.class: Patient.java PatientTester.java
 	javac PatientTester.java
 
