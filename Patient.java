@@ -3,8 +3,8 @@
  * @version 1.0 January 29th 2016
  */
 
-import java.time.LocalDateTime; // for patient arrival time
-import java.time.Clock;
+import java.time.LocalDateTime;
+import java.lang.Integer;
 
 class Patient {
 	/** The patient's first name. */
@@ -83,8 +83,10 @@ class Patient {
 	 * To be done upon adding patient to the PatientQueue.
 	 * @param systemClock a java.time.Clock object
 	 */
-	public void setArrivalTime(Clock systemClock) {
-		arrivalTime = new LocalDateTime(systemClock);
+	public void setArrivalTime() {
+		
+		arrivalTime = LocalDateTime.now();
+		arrivalTime.now();
 	}
 	
 	/** Set the patient's ID number.
@@ -93,5 +95,14 @@ class Patient {
 	 */
 	public void setPatientID(int ID) {
 		this.ID = ID;
+		ID++;
+	}
+	
+	/** Generate a string representing Patient object for testing. */
+	@Override
+	public String toString() {
+		return this.getFullName() + " ID:" + Integer.toString(ID, 10) +
+			" P:" + Integer.toString(triagePriority, 10) +
+			" T:" + arrivalTime.toString();
 	}
 }
