@@ -4,6 +4,11 @@
  */
 
 import java.util.PriorityQueue;
+import java.util.Scanner;
+import java.io.PrintWriter;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 public class PatientQueue {
 	/** Patient ID tracker -- increments on patient enqueue.
@@ -49,6 +54,46 @@ public class PatientQueue {
 		return priorityQueue.peek();
 	}
 	
+	/** Retrieves the stored patientIDCounter value stored in a file.
+	 * @param filename The name of the file containing patientIDCounter.
+	 * @return Resumed patientIDCounter as an int.
+	 */
+	public void retrieveIDCounter(String filename) {
+		int IDCounter = 1;
+		try {
+			Scanner in = new Scanner(new FileReader(filename));
+			if (in.hasNextInt()) {
+				IDCounter = in.nextInt();
+			} else {
+				IDCounter = 1;
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("File '" + filename + "' not found.");
+			System.out.println("Defaulting to patientIDCounter = 1.");
+			IDCounter = 1;
+		} finally {
+			this.patientIDCounter = IDCounter;
+		}
+	}
 	
+	/** Saves the PatientQueue's patientIDCounter value.
+	 * @param filename The name of the file to save the value to.
+	 */
+	public void saveIDCounter(String filename) {
+		PrintWriter w = null;
+		try {
+			w = new PrintWriter(filename, "ASCII");
+		} catch (FileNotFoundException e) {
+			System.err.println("File '" + filename + "' doesn't exist.");
+		} catch (UnsupportedEncodingException e) {
+			System.err.println("System does not support ASCII.");
+			System.err.println("Please contact your sysadmin.");
+		} finally {
+			if (w != null) {
+				w.println(this.patientIDCounter);
+				w.close();
+			}
+		}
+	}
 
 }
