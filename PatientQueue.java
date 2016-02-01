@@ -54,6 +54,17 @@ public class PatientQueue {
 		return priorityQueue.peek();
 	}
 	
+	/** Wraps the Patient() constructor within PatientQueue class.
+	 * @param firstName The patient's first name.
+	 * @param lastName The patient's last name.
+	 * @param priority The patient's level of injury or illness.
+	 * @return A Patient object.
+	 */
+	public Patient createPatient(String firstName, String lastName,
+		int priority) {
+		return new Patient(firstName, lastName, priority);
+	}
+	
 	/** Retrieves the stored patientIDCounter value stored in a file.
 	 * @param filename The name of the file containing patientIDCounter.
 	 * @return Resumed patientIDCounter as an int.
