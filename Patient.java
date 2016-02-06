@@ -5,6 +5,7 @@
 
 import java.time.LocalDateTime;
 import java.lang.Integer;
+import java.util.Comparator;
 
 class Patient implements Comparable<Patient> {
 	/** The patient's first name. */
@@ -150,4 +151,20 @@ class Patient implements Comparable<Patient> {
 			return this.arrivalTime.compareTo(p.arrivalTime);
 		}
 	}
+	
 }
+
+/** Allow for comparison by ID. */
+class PatientComparator implements Comparator<Patient> {
+	public int compare(Patient p1, Patient p2) {
+		if (p1.getPatientID() > p2.getPatientID()) {
+			return 1;
+		} else if (p1.getPatientID() < p2.getPatientID()) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+}
+
+

@@ -8,39 +8,10 @@ import java.time.LocalDateTime;
 import java.lang.NumberFormatException;
 import java.lang.Integer;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class EmergencyRoom {
-	static void _println(String message) {
-		System.out.println(message);
-	}
 	
-	static void _print(String message) {
-		System.out.print(message);
-	}
-
-	static void splashScreen() {
-		_println("=======================================================");
-		_println("   CPSC 240 EMERGENCY ROOM PATIENT QUEUE APPLICATION   ");
-		_println("=======================================================");
-		_print("");
-	}
-	
-	static void startMenu() {
-		_println("\nSelect an option:");
-		_println("\t(S)tart new session");
-		_println("\t(R)esume previous session");
-		_println("\t(Q)uit");
-	}
-	
-	static void mainMenu() {
-		_println("\nSelect an option:");
-		_println("\t(E)nter a new patient.");
-		_println("\t(R)emove next patient.");
-		_println("\t(F)ind position of patient in queue.");
-		_println("\t(S)ort and display patients by priority.");
-		_println("\t(P)rint list of patients sorted by ID.");
-		_println("\t(Q)uit");
-	}
 	
 	public static void main(String[] args) {
 		/* Initialize System Resources */
@@ -118,7 +89,7 @@ public class EmergencyRoom {
 				// (r)emove next patient in line
 				case 'R':
 				case 'r':
-					removePatient(input, pq);
+					removePatient(pq);
 					waitForInput();
 					break;
 				
@@ -132,14 +103,14 @@ public class EmergencyRoom {
 				// (s)ort and display patients by priority
 				case 'S':
 				case 's':
-					sortPatientsByPriority(input, pq);
+					sortPatientsByPriority(pq);
 					waitForInput();
 					break;
 				
 				// (p)rint list of patients sorted by ID
 				case 'P':
 				case 'p':
-					sortPatientsByID(input, pq);
+					sortPatientsByID(pq);
 					waitForInput();
 					break;
 				
@@ -161,10 +132,47 @@ public class EmergencyRoom {
 			
 	}
 	
+	/* Because I hate typing System.out.println() all the time. */
+	static void _println(String message) {
+		System.out.println(message);
+	}
+	static void _print(String message) {
+		System.out.print(message);
+	}
+	
+	/* What good program doesn't have one of these? */
+	static void splashScreen() {
+		_println("=======================================================");
+		_println("   CPSC 240 EMERGENCY ROOM PATIENT QUEUE APPLICATION   ");
+		_println("=======================================================");
+		_print("");
+	}
+	
+	/* Render menus for loops. */
+	static void startMenu() {
+		_println("\nSelect an option:");
+		_println("\t(S)tart new session");
+		_println("\t(R)esume previous session");
+		_println("\t(Q)uit");
+	}
+	static void mainMenu() {
+		_println("\nSelect an option:");
+		_println("\t(E)nter a new patient.");
+		_println("\t(R)emove next patient.");
+		_println("\t(F)ind position of patient in queue.");
+		_println("\t(S)ort and display patients by priority.");
+		_println("\t(P)rint list of patients sorted by ID.");
+		_println("\t(Q)uit");
+	}
+	
+	/* Indicate to user that command is expected. */
 	static void prompt() {
 		_print(" > ");
 	}
 	
+	/* Wrap PatientQueue::enqueue() operation inside helper function
+		for I/O and error checking.
+	*/
 	static void addPatient(Scanner s, PatientQueue pq) {
 		/* Initialize resources. */
 		String first, last;
@@ -179,6 +187,7 @@ public class EmergencyRoom {
 		first = s.nextLine();
 		
 		_print("\nEnter the patient's priority (000-999): ");
+
 		/* Prevent crashes caused by entering non-integer values. */
 		try {
 			priority = Integer.parseInt(s.nextLine(), 10);
@@ -196,7 +205,10 @@ public class EmergencyRoom {
 		_println(Integer.toString(pq.size()) +" now waiting.");
 	}
 	
-	static void removePatient(Scanner s, PatientQueue pq) {
+	/* Wrap PatientQueue::dequeue() operation in helper function
+		for error checking and I/O.
+	*/
+	static void removePatient(PatientQueue pq) {
 		if (pq.isEmpty()) {
 			_println("No patients are waiting at this time.");
 			return;
@@ -209,6 +221,9 @@ public class EmergencyRoom {
 		}
 	}
 	
+	/* Create a searchable array of patients and print all who match the
+		user's search input.
+	*/
 	static void findPatient(Scanner s, PatientQueue pq) {
 		/* Allocate resources. */
 		Patient[] patients = pq.toArray();
@@ -238,35 +253,62 @@ public class EmergencyRoom {
 		}
 	}
 	
-	static void sortPatientsByPriority(Scanner s, PatientQueue pq) {
+	/* Sort and print patients as they are ordered by priority. */
+	static void sortPatientsByPriority(PatientQueue pq) {
 		/* Initialize array */
 		Patient[] patients = pq.toArray();
 		
-		// Patient::compareTo() naturally orders Patients by priority,
-		// then arrival time
+		/* Patient::compareTo() naturally orders Patients by priority,
+			then arrival time. */
 		Arrays.sort(patients);
 		
 		/* Format line */
 		_println("ID\t Priority\tArrival Time\tLast Name, First Name");
 		/* Queue is already sorted when converted to array. */
 		for (int i = 0; i < patients.length; i++) {
-			_println(Integer.toString(patients[i].getPatientID()) + "\t " +
-				String.format("%06d", patients[i].getPriority()) + "\t" +
-				patients[i].getArrivalTime().toString() + "\t  " +
-				patients[i].getFullNameReversed());
+			_println(String.format("%06d", patients[i].getPatientID()) +
+				"\t " + Integer.toString(patients[i].getPriority()) +
+				"\t" + patients[i].getArrivalTime().toString() +
+				"\t  " + patients[i].getFullNameReversed());
+			}
+		}
+	
+	/* Sort and print patients as they are ordered by ID. */	
+	static void sortPatientsByID(PatientQueue pq) {
+		Patient[] patients = pq.toArray();
+		
+		// Arrays.sort(patients, new PatientComparator());
+		// Could not get Comparator-based sort to function correctly,
+		// going to do this the dumb way:
+		
+		/* Bubble sort for which I will repent later. */
+		Patient temp;
+		for (int i = 0; i < patients.length; i++) {
+			for (int j = 1; j < patients.length - i; j++) {
+				if (patients[j-1].getPatientID() >
+					patients[j].getPatientID()) {
+					temp = patients[j-1];
+					patients[j-1] = patients[j];
+					patients[j] = temp;
+				}
+			}
+		}
+		/* Format patient data. */
+		for (int i = 0; i < patients.length; i++) {
+			_println(String.format("%06d", patients[i].getPatientID()) +
+			"\t " + Integer.toString(patients[i].getPriority()) +
+			"\t" + patients[i].getArrivalTime().toString() +
+			"\t  " + patients[i].getFullNameReversed());
 		}
 	}
 	
-	static void sortPatientsByID(Scanner s, PatientQueue pq) {
-		/* TODO this */;
-	}
-	
+	/* Ensure that user sees output of other functions before returning to
+		main menu.
+	*/
 	static void waitForInput() {
 		// Code snippet borrowed from @katamayros' post on this SO thread:
 		//http://stackoverflow.com/questions/19870467/how-do-i-get-press-any
 		//-key-to-continue-to-work-in-my-java-code
-		
-		// ... I miss cin.get()
 		_println("Press ENTER/RETURN to continue.");
 		try {
 			System.in.read();
@@ -275,6 +317,4 @@ public class EmergencyRoom {
 		}
 	}
 }
-
-
 
