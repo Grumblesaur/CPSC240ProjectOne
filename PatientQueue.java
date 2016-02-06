@@ -78,12 +78,9 @@ public class PatientQueue {
 		}
 		
 		Patient p = new Patient(firstName, lastName, priority);
-		System.out.println("DEBUG/PQ.J: new Patient = " + p.toString());
 		p.setPatientID(this.patientIDCounter++);
 		LocalDateTime enqueueTime = p.getArrivalTime();
-		System.out.println("DEBUG/PQ.J: Obtained patient arrival time.");
 		priorityQueue.add(p);
-		System.out.println("DEBUG/PQ.J: Added patient to queue.");
 		return enqueueTime;
 	}
 	
