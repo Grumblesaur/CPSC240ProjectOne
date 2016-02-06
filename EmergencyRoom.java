@@ -225,6 +225,10 @@ public class EmergencyRoom {
 		user's search input.
 	*/
 	static void findPatient(Scanner s, PatientQueue pq) {
+		if (pq.isEmpty()) {
+			_println("No patients are waiting at this time.");
+			return;
+		}
 		/* Allocate resources. */
 		Patient[] patients = pq.toArray();
 		String first, last;
@@ -255,6 +259,11 @@ public class EmergencyRoom {
 	
 	/* Sort and print patients as they are ordered by priority. */
 	static void sortPatientsByPriority(PatientQueue pq) {
+		if (pq.isEmpty()) {
+			_println("No patients are waiting at this time.");
+			return;
+		}
+		
 		/* Initialize array */
 		Patient[] patients = pq.toArray();
 		
@@ -275,6 +284,10 @@ public class EmergencyRoom {
 	
 	/* Sort and print patients as they are ordered by ID. */	
 	static void sortPatientsByID(PatientQueue pq) {
+		if (pq.isEmpty()) {
+			_println("No patients are waiting at this time.");
+			return;
+		}
 		Patient[] patients = pq.toArray();
 		
 		// Arrays.sort(patients, new PatientComparator());
