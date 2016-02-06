@@ -90,6 +90,14 @@ class Patient {
 		ID++;
 	}
 	
+	/** Obtain the patient's ID number.
+	 * @return An int, the patient's ID number.
+	 */
+	public int getPatientID() {
+		return this.ID;
+	}
+	
+	
 	/** Generate a string representing Patient object for testing. */
 	@Override
 	public String toString() {

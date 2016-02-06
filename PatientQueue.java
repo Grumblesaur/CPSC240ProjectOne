@@ -3,10 +3,12 @@
  * @version 1.0 January 31st, 2016
  */
 
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
@@ -16,12 +18,20 @@ public class PatientQueue {
 	 */
 	private int patientIDCounter;
 	
+	/** Patient counter -- increments on enqueue, decrements on dequeue.
+	 * When this value is zero, the queue is empty and the dequeue()
+	 * method should NOT be called on it. This value can be checked with
+	 * the method isEmpty().
+	 */
+	private int patientCounter;
+	
 	/** Priority queue for determining which patient will next be helped.*/
 	private PriorityQueue<Patient> priorityQueue;
 	
 	/** Default constructor for PatientQueue */	
 	public PatientQueue() {
 		patientIDCounter = 1;
+		patientCounter = 0;
 		priorityQueue = new PriorityQueue<Patient>();
 	}
 	
@@ -30,20 +40,15 @@ public class PatientQueue {
 	 */
 	public PatientQueue(int pIDc) {
 		patientIDCounter = pIDc;
+		patientCounter = 0;
 		priorityQueue = new PriorityQueue<Patient>();
-	}
-	
-	/** Adds a patient to the queue.
-	 * @param p A patient.
-	 */
-	public void enqueue(Patient p) {
-		priorityQueue.add(p);
 	}
 	
 	/** Removes the patient from the front of the list.
 	 * @return The most urgent patient in the queue.
 	 */
 	public Patient dequeue() {
+		patientCounter--;
 		return priorityQueue.poll();
 	}
 	
@@ -54,15 +59,32 @@ public class PatientQueue {
 		return priorityQueue.peek();
 	}
 	
-	/** Wraps the Patient() constructor within PatientQueue class.
+	/** Checks to see if the priority queue is empty.
+	 * @return A boolean, true if the queue is empty, false otherwise.
+	 */
+	public boolean isEmpty() {
+		return this.patientCounter == 0;
+	}
+	
+	/** Constructs and enqueues a patient.
 	 * @param firstName The patient's first name.
 	 * @param lastName The patient's last name.
 	 * @param priority The patient's level of injury or illness.
-	 * @return A Patient object.
+	 * @return A LocalDateTime object when the patient was enqueued.
 	 */
-	public Patient createPatient(String firstName, String lastName,
+	public LocalDateTime enqueue(String firstName, String lastName,
 		int priority) {
-		return new Patient(firstName, lastName, priority);
+		if (priority > 999) {
+			priority = 999;
+		} else if (priority < 0) {
+			priority = 0;
+		}
+		
+		Patient p = new Patient(firstName, lastName, priority);
+		LocalDateTime enqueueTime = p.getArrivalTime();
+		priorityQueue.add(p);
+		patientCounter++;
+		return enqueueTime;
 	}
 	
 	/** Retrieves the stored patientIDCounter value stored in a file.
@@ -107,5 +129,14 @@ public class PatientQueue {
 			}
 		}
 	}
-
+	
+	/** Returns an ArrayList of Patients in Queue order.
+	 * @return An ArrayList of Patient objects.
+	 */
+	public ArrayList toArrayList() {
+		ArrayList<Patient> patients =
+		new ArrayList<Patient>(this.priorityQueue);
+		return patients;
+	}
+	
 }
