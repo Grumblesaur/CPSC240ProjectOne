@@ -288,22 +288,10 @@ public class EmergencyRoom {
 			_println("No patients are waiting at this time.");
 			return;
 		}
+		
+		/* No more bubble sort! */
 		Patient[] patients = pq.toArray();
-		
 		Arrays.sort(patients, new PatientComparator());
-		
-		/* Bubble sort for which I will repent later.
-		Patient temp;
-		for (int i = 0; i < patients.length; i++) {
-			for (int j = 1; j < patients.length - i; j++) {
-				if (patients[j-1].getPatientID() >
-					patients[j].getPatientID()) {
-					temp = patients[j-1];
-					patients[j-1] = patients[j];
-					patients[j] = temp;
-				}
-			}
-		} */
 		
 		/* Format patient data. */
 		for (int i = 0; i < patients.length; i++) {
