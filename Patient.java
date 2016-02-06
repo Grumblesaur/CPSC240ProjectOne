@@ -1,8 +1,6 @@
 /** Stores information about a patient awaiting assistance in ER.
  * @author James Murphy
- * @version 1.2 January 31st 2016
- * ! arrivalTime is now set within the constructor
- * + compareTo() method
+ * @version 2.0 January 6th 2016
  */
 
 import java.time.LocalDateTime;
@@ -107,9 +105,8 @@ class Patient implements Comparable<Patient> {
 	/** Generate a string representing Patient object for testing. */
 	@Override
 	public String toString() {
-		return this.getFullName() + " ID:" + Integer.toString(ID, 10) +
-			" P:" + Integer.toString(triagePriority, 10) +
-			" T:" + arrivalTime.toString();
+		return this.getFullName() + " (ID: " +
+			String.format("%06d", ID) + ").";
 	}
 	
 	/** Determine if one Patient is the same as another.

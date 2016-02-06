@@ -1,6 +1,6 @@
 /** Queue for patients waiting for medical attention in emergency room.
  * @author James Murphy
- * @version 1.0 January 31st, 2016
+ * @version 2.0 February 6th, 2016
  */
 
 import java.util.ArrayList;
@@ -127,12 +127,15 @@ public class PatientQueue {
 		}
 	}
 	
-	/** Returns an ArrayList of Patients in Queue order.
-	 * @return An ArrayList of Patient objects.
+	/** Returns an array of Patients in Queue order.
+	 * @return An array of Patient objects.
 	 */
-	public ArrayList toArrayList() {
-		ArrayList<Patient> patients =
-		new ArrayList<Patient>(this.priorityQueue);
+	public Patient[] toArray() {
+		Object[] objects = this.priorityQueue.toArray();
+		Patient[] patients = new Patient[objects.length];
+		for (int i = 0; i < objects.length; i++) {
+			patients[i] = (Patient) objects[i];
+		}
 		return patients;
 	}
 	

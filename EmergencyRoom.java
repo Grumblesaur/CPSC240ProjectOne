@@ -7,6 +7,7 @@ import java.util.InputMismatchException;
 import java.time.LocalDateTime;
 import java.lang.NumberFormatException;
 import java.lang.Integer;
+import java.util.Arrays;
 
 public class EmergencyRoom {
 	static void _println(String message) {
@@ -108,6 +109,7 @@ public class EmergencyRoom {
 					} catch (InputMismatchException e) {
 						System.err.println(e.getMessage());
 					} finally {
+						waitForInput();
 						break;
 					}
 				
@@ -115,24 +117,28 @@ public class EmergencyRoom {
 				case 'R':
 				case 'r':
 					removePatient(input, pq);
+					waitForInput();
 					break;
 				
 				// (f)ind position of patient in queue
 				case 'F':
 				case 'f':
 					findPatient(input, pq);
+					waitForInput();
 					break;
 				
 				// (s)ort and display patients by priority
 				case 'S':
 				case 's':
 					sortPatientsByPriority(input, pq);
+					waitForInput();
 					break;
 				
 				// (p)rint list of patients sorted by ID
 				case 'P':
 				case 'p':
 					sortPatientsByID(input, pq);
+					waitForInput();
 					break;
 				
 				// (q)uit
@@ -179,8 +185,6 @@ public class EmergencyRoom {
 		/* Enqueue the patient and print confirmation message to screen. */
 		_println("");
 		LocalDateTime enqueueTime = pq.enqueue(first, last, priority);
-		System.err.println("DEBUG/ER.J: enqueueTime is: " +
-			enqueueTime.toString());
 		_println("Added patient '" + first + " " + last + "' at " +
 			enqueueTime.toString() + ".");
 		_println(Integer.toString(pq.size()) +" now waiting.");
@@ -199,16 +203,56 @@ public class EmergencyRoom {
 		}
 	}
 	
-	static void findPatient(Scanner s, patientQueue pq);
-	
+	static void findPatient(Scanner s, PatientQueue pq) {
+		/* Allocate resources. */
+		Patient[] patients = pq.toArray();
+		String first, last;
+		boolean found = false;
+		
+		_print("\nEnter the patient's last name: ");
+		last = s.nextLine();
+		
+		_print("\nEnter the patient's first name: ");
+		first = s.nextLine();
+		
+		/* Find all patients with given name. */
+		for (int i = 0; i < patients.length; i++) {
+			if (patients[i].getFirstName().equals(first)) {
+				if (patients[i].getLastName().equals(last)) {
+					_println("There are " + Integer.toString(i) +
+						" people ahead of " + patients[i].toString());
+					found = true;
+				}
+			}
+		}
+		
+		/* Alert user to spelling errors or unknown patient. */
+		if (!found) {
+			_println("Patient '" + first + " " + last + "' was not found.");
+		}
 	}
 	
-	static void sortPatientsByPriority(Scanner s, patientQueue pq) {
-	
+	static void sortPatientsByPriority(Scanner s, PatientQueue pq) {
+		/* Initialize array */
+		Patient[] patients = pq.toArray();
+		
+		// Patient::compareTo() naturally orders Patients by priority,
+		// then arrival time
+		Arrays.sort(patients);
+		
+		/* Format line */
+		_println("ID\t Priority\tArrival Time\tLast Name, First Name");
+		/* Queue is already sorted when converted to array. */
+		for (int i = patients.length - 1; i >= 0; i--) {
+			_println(Integer.toString(patients[i].getPatientID()) + "\t " +
+				String.format("%06d", patients[i].getPriority()) + "\t" +
+				patients[i].getArrivalTime().toString() + "\t  " +
+				patients[i].getFullNameReversed());
+		}
 	}
 	
-	static void sortPatientsByID(Scanner s, patientQueue pq) {
-	
+	static void sortPatientsByID(Scanner s, PatientQueue pq) {
+		;
 	}
 	
 	static void waitForInput() {
