@@ -69,7 +69,8 @@ public class PatientQueue {
 	 * @param filename The name of the file containing patientIDCounter.
 	 * @return Resumed patientIDCounter as an int.
 	 */
-	public void retrieveIDCounter(String filename) {
+	public static int retrieveIDCounter() {
+		String filename = "idc.txt";
 		int IDCounter = 1;
 		try {
 			Scanner in = new Scanner(new FileReader(filename));
@@ -83,14 +84,14 @@ public class PatientQueue {
 			System.out.println("Defaulting to patientIDCounter = 1.");
 			IDCounter = 1;
 		} finally {
-			this.patientIDCounter = IDCounter;
+			return IDCounter;
 		}
 	}
 	
-	/** Saves the PatientQueue's patientIDCounter value.
-	 * @param filename The name of the file to save the value to.
+	/** Saves the PatientQueue's patientIDCounter value to file "idc.txt".
 	 */
-	public void saveIDCounter(String filename) {
+	public void saveIDCounter() {
+		String filename = "idc.txt";
 		PrintWriter w = null;
 		try {
 			w = new PrintWriter(filename, "ASCII");
