@@ -290,11 +290,9 @@ public class EmergencyRoom {
 		}
 		Patient[] patients = pq.toArray();
 		
-		// Arrays.sort(patients, new PatientComparator());
-		// Could not get Comparator-based sort to function correctly,
-		// going to do this the dumb way:
+		Arrays.sort(patients, new PatientComparator());
 		
-		/* Bubble sort for which I will repent later. */
+		/* Bubble sort for which I will repent later.
 		Patient temp;
 		for (int i = 0; i < patients.length; i++) {
 			for (int j = 1; j < patients.length - i; j++) {
@@ -305,7 +303,8 @@ public class EmergencyRoom {
 					patients[j] = temp;
 				}
 			}
-		}
+		} */
+		
 		/* Format patient data. */
 		for (int i = 0; i < patients.length; i++) {
 			_println(String.format("%06d", patients[i].getPatientID()) +

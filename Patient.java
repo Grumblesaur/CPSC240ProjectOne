@@ -154,17 +154,4 @@ class Patient implements Comparable<Patient> {
 	
 }
 
-/** Allow for comparison by ID. */
-class PatientComparator implements Comparator<Patient> {
-	public int compare(Patient p1, Patient p2) {
-		if (p1.getPatientID() > p2.getPatientID()) {
-			return 1;
-		} else if (p1.getPatientID() < p2.getPatientID()) {
-			return -1;
-		} else {
-			return 0;
-		}
-	}
-}
-
 
