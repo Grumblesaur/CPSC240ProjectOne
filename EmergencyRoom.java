@@ -116,7 +116,25 @@ public class EmergencyRoom {
 				case 'r':
 					removePatient(input, pq);
 					break;
-			
+				
+				// (f)ind position of patient in queue
+				case 'F':
+				case 'f':
+					findPatient(input, pq);
+					break;
+				
+				// (s)ort and display patients by priority
+				case 'S':
+				case 's':
+					sortPatientsByPriority(input, pq);
+					break;
+				
+				// (p)rint list of patients sorted by ID
+				case 'P':
+				case 'p':
+					sortPatientsByID(input, pq);
+					break;
+				
 				// (q)uit
 				case 'Q':
 				case 'q':
@@ -131,11 +149,11 @@ public class EmergencyRoom {
 			
 	}
 	
-	public static void prompt() {
+	static void prompt() {
 		_print(" > ");
 	}
 	
-	public static void addPatient(Scanner s, PatientQueue pq) {
+	static void addPatient(Scanner s, PatientQueue pq) {
 		/* Initialize resources. */
 		String first, last;
 		int priority = -1;
@@ -168,7 +186,7 @@ public class EmergencyRoom {
 		_println(Integer.toString(pq.size()) +" now waiting.");
 	}
 	
-	public static void removePatient(Scanner s, PatientQueue pq) {
+	static void removePatient(Scanner s, PatientQueue pq) {
 		if (pq.isEmpty()) {
 			_println("No patients are waiting at this time.");
 			return;
@@ -179,6 +197,18 @@ public class EmergencyRoom {
 			_println("Patient " + patientName + " ID: " + pid +
 				" will be seen now.");
 		}
+	}
+	
+	static void findPatient(Scanner s, patientQueue pq);
+	
+	}
+	
+	static void sortPatientsByPriority(Scanner s, patientQueue pq) {
+	
+	}
+	
+	static void sortPatientsByID(Scanner s, patientQueue pq) {
+	
 	}
 	
 	static void waitForInput() {

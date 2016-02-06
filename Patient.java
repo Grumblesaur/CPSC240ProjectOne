@@ -97,6 +97,12 @@ class Patient implements Comparable<Patient> {
 		return this.ID;
 	}
 	
+	/* Borrowed code from the following site to figure out how to implement
+		Comparable interface for Patient class:
+		https://www.caveofprogramming.com/java-collections-framework/
+		natural-order-comparable-collection-java-collections-framework-
+		video-tutorial-part-8.html
+	*/
 	
 	/** Generate a string representing Patient object for testing. */
 	@Override
