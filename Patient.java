@@ -141,10 +141,11 @@ class Patient implements Comparable<Patient> {
 	 */
 	@Override
 	public int compareTo(Patient p) {
+		/* Invert expected values due to Java min-heap nonsense. */
 		if (this.triagePriority > p.triagePriority) {
-			return 1;
-		} else if (this.triagePriority < p.triagePriority) {
 			return -1;
+		} else if (this.triagePriority < p.triagePriority) {
+			return 1;
 		} else {
 			return this.arrivalTime.compareTo(p.arrivalTime);
 		}

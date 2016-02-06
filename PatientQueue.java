@@ -63,6 +63,13 @@ public class PatientQueue {
 		return priorityQueue.size();
 	}
 	
+	/** Obtains number of patients since session start.
+	 * @return An int, patientIDCounter.
+	 */
+	public int getPatientIDCounter() {
+		return patientIDCounter;
+	}
+	
 	/** Constructs and enqueues a patient.
 	 * @param firstName The patient's first name.
 	 * @param lastName The patient's last name.

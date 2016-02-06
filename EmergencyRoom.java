@@ -74,6 +74,8 @@ public class EmergencyRoom {
 				case 'R':
 				case 'r':
 					pq = new PatientQueue(PatientQueue.retrieveIDCounter());
+					_println("Patient IDs starting from " +
+						Integer.toString(pq.getPatientIDCounter()));
 					validCommand = true;
 					break;
 				// (Q)uit from program
@@ -145,7 +147,11 @@ public class EmergencyRoom {
 				case 'Q':
 				case 'q':
 					quitting = true;
-					// prompt user to save here
+					pq.saveIDCounter();
+					_println("Session data saved in 'idc.txt'.");
+					_print("You will be prompted to resume this session");
+					_print(" upon next startup.\n");
+					_println("Closing program...");
 					break;
 				
 				default:
@@ -243,7 +249,7 @@ public class EmergencyRoom {
 		/* Format line */
 		_println("ID\t Priority\tArrival Time\tLast Name, First Name");
 		/* Queue is already sorted when converted to array. */
-		for (int i = patients.length - 1; i >= 0; i--) {
+		for (int i = 0; i < patients.length; i++) {
 			_println(Integer.toString(patients[i].getPatientID()) + "\t " +
 				String.format("%06d", patients[i].getPriority()) + "\t" +
 				patients[i].getArrivalTime().toString() + "\t  " +
@@ -252,7 +258,7 @@ public class EmergencyRoom {
 	}
 	
 	static void sortPatientsByID(Scanner s, PatientQueue pq) {
-		;
+		/* TODO this */;
 	}
 	
 	static void waitForInput() {
