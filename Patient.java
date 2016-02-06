@@ -8,7 +8,7 @@
 import java.time.LocalDateTime;
 import java.lang.Integer;
 
-class Patient {
+class Patient implements Comparable<Patient> {
 	/** The patient's first name. */
 	private String firstName;
 	
@@ -106,9 +106,37 @@ class Patient {
 			" T:" + arrivalTime.toString();
 	}
 	
+	/** Determine if one Patient is the same as another.
+	 * @param obj An object.
+	 * @return A boolean, true if equal, false otherwise.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final Patient other = (Patient) obj;
+		if (ID == 0) {
+			if (other.ID != 0) {
+				return false;
+			}
+		} else if (ID != other.ID) {
+			return false;
+		}
+		return true;
+	}
+		
+		
 	/** Compares objects to allow for a natural ordering.
 	 * @param p A patient object.
 	 */
+	@Override
 	public int compareTo(Patient p) {
 		if (this.triagePriority > p.triagePriority) {
 			return 1;

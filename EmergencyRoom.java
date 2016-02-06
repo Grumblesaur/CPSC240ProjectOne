@@ -5,6 +5,8 @@
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import java.time.LocalDateTime;
+import java.lang.NumberFormatException;
+import java.lang.Integer;
 
 public class EmergencyRoom {
 	static void _println(String message) {
@@ -54,8 +56,12 @@ public class EmergencyRoom {
 			// prompt user input
 			startMenu();
 			prompt();
-			selection = input.next().charAt(0);
-			
+			// some joker forgets to put in a character
+			try {
+				selection = input.nextLine().charAt(0);
+			} catch (StringIndexOutOfBoundsException e) {
+				continue;
+			}
 			switch (selection) {
 				// (S)tart new session
 				case 'S':
@@ -87,8 +93,12 @@ public class EmergencyRoom {
 			// prompt user input
 			mainMenu();
 			prompt();
-			selection = input.next().charAt(0);
-			
+			// some joker hits enter without entering a character
+			try {
+				selection = input.nextLine().charAt(0);
+			} catch (StringIndexOutOfBoundsException e) {
+				continue;
+			}
 			switch (selection) {
 				// (e)nter new patient
 				case 'E':
@@ -126,40 +136,49 @@ public class EmergencyRoom {
 	}
 	
 	public static void addPatient(Scanner s, PatientQueue pq) {
+		/* Initialize resources. */
 		String first, last;
 		int priority = -1;
 		boolean failed = false;
 		
+		/* Obtain fields needed for Patient creation. */	
 		_print("\nEnter the patient's last name: ");
-		last = s.next();
+		last = s.nextLine();
 		
 		_print("\nEnter the patient's first name: ");
-		first = s.next();
+		first = s.nextLine();
 		
 		_print("\nEnter the patient's priority (000-999): ");
+		/* Prevent crashes caused by entering non-integer values. */
 		try {
-			priority = s.nextInt();
-		} catch (InputMismatchException e) {
+			priority = Integer.parseInt(s.nextLine(), 10);
+		} catch (NumberFormatException e) {
 			failed = true;
 			throw new InputMismatchException("Value was not an integer!" +
 				" Returning to menu...");
 		}
 		
+		/* Enqueue the patient and print confirmation message to screen. */
+		_println("");
 		LocalDateTime enqueueTime = pq.enqueue(first, last, priority);
+		System.err.println("DEBUG/ER.J: enqueueTime is: " +
+			enqueueTime.toString());
 		_println("Added patient '" + first + " " + last + "' at " +
 			enqueueTime.toString() + ".");
+		_println(Integer.toString(pq.size()) +" now waiting.");
 	}
 	
 	public static void removePatient(Scanner s, PatientQueue pq) {
 		if (pq.isEmpty()) {
 			_println("No patients are waiting at this time.");
 			return;
+		} else {
+			Patient nextInLine = pq.dequeue();
+			String patientName = nextInLine.getFullName();
+			String pid = String.format("%06d", nextInLine.getPatientID());
+			_println("Patient " + patientName + " ID: " + pid +
+				" will be seen now.");
 		}
-		Patient nextInLine = pq.dequeue();
-		String patientName = nextInLine.getFullName();
-		String pid = String.format("%06d", nextInLine.getPatientID());
-		_println("Patient " + patientName + " ID: " + pid +
-			" will be seen now.");
 	}
 	
 	static void waitForInput() {

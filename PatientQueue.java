@@ -18,20 +18,12 @@ public class PatientQueue {
 	 */
 	private int patientIDCounter;
 	
-	/** Patient counter -- increments on enqueue, decrements on dequeue.
-	 * When this value is zero, the queue is empty and the dequeue()
-	 * method should NOT be called on it. This value can be checked with
-	 * the method isEmpty().
-	 */
-	private int patientCounter;
-	
 	/** Priority queue for determining which patient will next be helped.*/
 	private PriorityQueue<Patient> priorityQueue;
 	
 	/** Default constructor for PatientQueue */	
 	public PatientQueue() {
 		patientIDCounter = 1;
-		patientCounter = 0;
 		priorityQueue = new PriorityQueue<Patient>();
 	}
 	
@@ -40,7 +32,6 @@ public class PatientQueue {
 	 */
 	public PatientQueue(int pIDc) {
 		patientIDCounter = pIDc;
-		patientCounter = 0;
 		priorityQueue = new PriorityQueue<Patient>();
 	}
 	
@@ -48,7 +39,6 @@ public class PatientQueue {
 	 * @return The most urgent patient in the queue.
 	 */
 	public Patient dequeue() {
-		patientCounter--;
 		return priorityQueue.poll();
 	}
 	
@@ -63,7 +53,14 @@ public class PatientQueue {
 	 * @return A boolean, true if the queue is empty, false otherwise.
 	 */
 	public boolean isEmpty() {
-		return this.patientCounter == 0;
+		return priorityQueue.size() == 0;
+	}
+	
+	/** Obtains number of patients in queue.
+	 * @return An in, the number of patients waiting.
+	 */
+	public int size() {
+		return priorityQueue.size();
 	}
 	
 	/** Constructs and enqueues a patient.
@@ -81,9 +78,12 @@ public class PatientQueue {
 		}
 		
 		Patient p = new Patient(firstName, lastName, priority);
+		System.out.println("DEBUG/PQ.J: new Patient = " + p.toString());
+		p.setPatientID(this.patientIDCounter++);
 		LocalDateTime enqueueTime = p.getArrivalTime();
+		System.out.println("DEBUG/PQ.J: Obtained patient arrival time.");
 		priorityQueue.add(p);
-		patientCounter++;
+		System.out.println("DEBUG/PQ.J: Added patient to queue.");
 		return enqueueTime;
 	}
 	
