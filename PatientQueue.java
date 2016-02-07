@@ -86,6 +86,9 @@ public class PatientQueue {
 		
 		Patient p = new Patient(firstName, lastName, priority);
 		p.setPatientID(this.patientIDCounter++);
+		if (this.patientIDCounter > 999999) {
+			this.patientIDCounter = 1;
+		}
 		LocalDateTime enqueueTime = p.getArrivalTime();
 		priorityQueue.add(p);
 		return enqueueTime;
