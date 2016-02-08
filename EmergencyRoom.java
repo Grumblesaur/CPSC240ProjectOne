@@ -66,6 +66,7 @@ public class EmergencyRoom {
 						_println("Patient IDs starting from " +
 						Integer.toString(pq.getPatientIDCounter()));
 						validCommand = true;
+						waitForInput();
 						break;
 					}
 				// (Q)uit from program
@@ -170,7 +171,7 @@ public class EmergencyRoom {
 	/* Render menus for loops. */
 	static void startMenu() {
 		_println("\nSelect an option:");
-		_println("\t(S)tart new session");
+		_println("\t(S)tart new session (Will overwrite saved session!)");
 		_println("\t(R)esume previous session");
 		_println("\t(Q)uit");
 	}
