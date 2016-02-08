@@ -2,17 +2,25 @@
 // CPSC 240 / Object-Oriented Analysis & Design
 // Project 1 / Emergency Room Patient Manager
 
+/* Utilities and Libraries */
 import java.util.Scanner;
-import java.util.InputMismatchException;
 import java.time.LocalDateTime;
-import java.lang.NumberFormatException;
 import java.lang.Integer;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.FileOutputStream;
+
+/* Exceptions */
+import java.io.IOException;
+import java.util.InputMismatchException;
+import java.lang.NumberFormatException;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 public class EmergencyRoom {
-	
-	
+	/* Program logic */
 	public static void main(String[] args) {
 		/* Initialize System Resources */
 		PatientQueue pq = null;
@@ -44,11 +52,22 @@ public class EmergencyRoom {
 				// (R)esume previous session
 				case 'R':
 				case 'r':
-					pq = new PatientQueue(PatientQueue.retrieveIDCounter());
-					_println("Patient IDs starting from " +
+					int IDCounter = 1;
+					try {
+						Scanner in = new Scanner(new FileReader("idc.txt"));
+						if (in.hasNextInt()) {
+							IDCounter = in.nextInt();
+						}
+					} catch(FileNotFoundException e) {
+						System.err.println("File 'idc.txt' not found.");
+						System.err.println("Defaulting ID counter to 1.");
+					} finally {
+						pq = new PatientQueue(IDCounter);
+						_println("Patient IDs starting from " +
 						Integer.toString(pq.getPatientIDCounter()));
-					validCommand = true;
-					break;
+						validCommand = true;
+						break;
+					}
 				// (Q)uit from program
 				case 'Q':
 				case 'q':
@@ -118,7 +137,7 @@ public class EmergencyRoom {
 				case 'Q':
 				case 'q':
 					quitting = true;
-					pq.saveIDCounter();
+					save(pq);
 					_println("Session data saved in 'idc.txt'.");
 					_print("You will be prompted to resume this session");
 					_print(" upon next startup.\n");
@@ -316,5 +335,29 @@ public class EmergencyRoom {
 			;
 		}
 	}
+	
+	/* Save IDCounter state to file. */
+	static void save(PatientQueue pq) {
+		PrintWriter w = null;
+		try {
+			w = new PrintWriter("idc.txt", "ASCII");
+		} catch (FileNotFoundException e) {
+			// Writing to the working directory, which is a hardcoded
+			// condition in this case, will not cause this exception to
+			// occur.
+		} catch (UnsupportedEncodingException e) {
+			System.err.println("System does not support ASCII.");
+			System.err.println("Please contact your sysadmin.");
+			System.exit(1);
+		} finally {
+			if (w != null) {
+				w.println(pq.getPatientIDCounter());
+				w.close();
+			} else {
+				save(pq);
+			}
+		}
+	}
+	
 }
 

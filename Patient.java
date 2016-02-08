@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.lang.Integer;
 import java.util.Comparator;
 
-class Patient implements Comparable<Patient> {
+public class Patient implements Comparable<Patient> {
 	/** The patient's first name. */
 	private String firstName;
 	
