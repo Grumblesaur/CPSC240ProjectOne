@@ -299,8 +299,8 @@ public class EmergencyRoom {
 				"\t " + Integer.toString(patients[i].getPriority()) +
 				"\t" + patients[i].getArrivalTime().toString() +
 				"\t  " + patients[i].getFullNameReversed());
-			}
 		}
+	}
 	
 	/* Sort and print patients as they are ordered by ID. */	
 	static void sortPatientsByID(PatientQueue pq) {
