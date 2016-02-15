@@ -354,8 +354,6 @@ public class EmergencyRoom {
 			if (w != null) {
 				w.println(pq.getPatientIDCounter());
 				w.close();
-			} else {
-				save(pq);
 			}
 		}
 	}
