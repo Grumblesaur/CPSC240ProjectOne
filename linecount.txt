@@ -1,0 +1,24 @@
+157 lines in file 'Patient.java'.
+59 lines of code.
+75 lines of comments.
+23 lines of whitespace.
+
+105 lines in file 'PatientQueue.java'.
+50 lines of code.
+41 lines of comments.
+14 lines of whitespace.
+
+362 lines in file 'EmergencyRoom.java'.
+26 lines of code.
+296 lines of comments.
+40 lines of whitespace.
+
+12 lines in file 'PatientComparator.java'.
+1 lines of code.
+7 lines of comments.
+4 lines of whitespace.
+
+636 lines in files overall.
+136 lines of code.
+419 lines of comments.
+81 lines of whitespace.
